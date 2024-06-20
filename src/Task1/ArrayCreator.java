@@ -1,6 +1,6 @@
 package Task1;
 
-public class Numbers {
+public class ArrayCreator {
 
     public int[] createArray() {
         int[] arr = new int[180];

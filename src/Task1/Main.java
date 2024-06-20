@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         Random random = new Random();
-        Numbers numbers = new Numbers();
+        ArrayCreator numbers = new ArrayCreator();
 
         int[] arr = numbers.createArray();
 
