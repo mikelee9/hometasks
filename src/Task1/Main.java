@@ -1,24 +1,14 @@
 package Task1;
 
-//Необходимо написать программу, которая сможет генерировать математические примеры для тренировки базовых навыков счета.
-//Версия 1. Программа выводит в консоль 20 случайно сгенерированных примеров на умножение двух двузначных чисел
-
-//Версия 2. Программа проверяет, что среди примеров нет повторов. Если они есть, то вместо него генерируется другой пример
-// и событие фиксируется выводом в консоль
-
-//Версия 3. Программа принимает параметры на вход
-//int - количество примеров
-//int - максимальная разрядность чисел
-//int - действия с числами (1 - сложение, 2 - вычитание, 3 - умножение, 4 деление)
-
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Введите желаемое количество примеров");
@@ -29,6 +19,7 @@ public class Main {
             System.out.println("Ошибка. Введено не число");
             return;
         }
+
         String[] storage = new String[problemsNumber];
 
         Random random = new Random();
@@ -54,12 +45,11 @@ public class Main {
             return;
         }
 
-        System.out.println("Какое математическое действие прорешиваем? 1 - сложение, 2 - вычитание, 3 - умножение, 4 деление");
+        System.out.println("Какое математическое действие прорешиваем? 1 - сложение, 2 - вычитание, 3 - умножение, 4 - деление");
         String mathOperation;
 
         try {
             int usersMathOperationInput = scanner.nextInt();
-
             switch (usersMathOperationInput) {
                 case (1) -> mathOperation = "+";
                 case (2) -> mathOperation = "-";
@@ -75,13 +65,19 @@ public class Main {
             return;
         }
 
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.println("Как назовёте файл?");
+        String fileName = scanner.nextLine();
+        System.out.println("Файл " + fileName + " создан. Ищите его в папке с приложением");
+
         for (int i = 0; i < problemsNumber; i++) {
             int randomValue1 = arr[random.nextInt(arr.length)];
             int randomValue2 = arr[random.nextInt(arr.length)];
             storage[i] = (randomValue1 + " " + mathOperation + " " + randomValue2 + " =");
         }
 
-        // trying to find duplicates and replace it
+        // trying to find duplicates and replace them
         for (int i = 0; i < storage.length; i++) {
             for (int j = i + 1; j < storage.length; j++) {
                 if (storage[i].equals(storage[j])) {
@@ -89,7 +85,15 @@ public class Main {
                     storage[j] = arr[random.nextInt(arr.length)] + " " + mathOperation + " " + arr[random.nextInt(arr.length)] + " =";
                 }
             }
-            System.out.println((i + 1) + ". " + storage[i]);
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + ".txt"))) {
+            for (int i = 0; i < storage.length; i++) {
+                writer.write((i + 1) + ". " + storage[i]);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
